@@ -4,9 +4,8 @@ project(lem_in)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        main.c
-        lem-in.c
-        lem-in.h
+        src/lem-in.c
+        src/lem-in.h
         libft/ft_amount_d.c
         libft/ft_atoi.c
         libft/ft_bzero.c
@@ -70,5 +69,8 @@ set(SOURCE_FILES
         libft/ft_tolower.c
         libft/ft_toupper.c
         libft/full.c
-        libft/is_number.c)
+        libft/is_number.c
+        libft/get_next_line.c
+        src/validation/minor_val_fs.c
+        src/validation/validation.c)
 add_executable(lem_in ${SOURCE_FILES})
