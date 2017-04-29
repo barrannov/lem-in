@@ -1,5 +1,22 @@
 #include "lem-in.h"
 
+
+
+//int main()
+//{
+//	char *ar;
+//
+//
+//	ar = (char *)malloc((sizeof(char) * 5) + 1);
+//
+//	int i;
+//
+//	i = 0;
+//
+//	printf("%d", length((void *)&ar));
+//}
+
+
 int main()
 {
 	t_ants *all;
@@ -10,7 +27,8 @@ int main()
 		write_error();
 		return (0);
 	}
-	return (1);
+
+	return (0);
 }
 /*
 

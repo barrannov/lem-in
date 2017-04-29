@@ -95,5 +95,6 @@ int				ft_count_l(char *s, char c);
 int				ft_count_w(const char *s, char c);
 t_list			*ft_lstnew(void const *content, size_t content_size);
 int				is_number(char *line);
+int				length(void **array);
 
 #endif
