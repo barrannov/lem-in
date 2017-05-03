@@ -72,5 +72,5 @@ set(SOURCE_FILES
         libft/is_number.c
         libft/get_next_line.c
         src/validation/minor_val_fs.c
-        src/validation/validation.c libft/length.c)
+        src/validation/validation.c libft/length.c src/validation/check_links.c src/validation/check_rooms.c src/find_shortest.c)
 add_executable(lem_in ${SOURCE_FILES})
