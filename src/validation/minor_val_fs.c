@@ -45,6 +45,7 @@ void lst_add_links(t_links **stk, char *connection)
 
 	new = (t_links *) malloc(sizeof(t_links));
 	new->connection = ft_strdup(connection);
+	new->way = NULL;
 	new->next = NULL;
 	if (*stk == NULL)
 		(*stk) = new;

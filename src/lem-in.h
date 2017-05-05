@@ -17,6 +17,9 @@ typedef struct		s_ants
 {
 	int amount_ants;
 	struct s_room *rooms_info;
+	char *start;
+	char *end;
+	struct 		s_links *ways;
 }					t_ants;
 
 typedef struct		s_room
@@ -24,16 +27,16 @@ typedef struct		s_room
 	char	*name;
 	int		position; //0 - normal room, 1 - start_al, 2 - end
 	struct 		s_links *links;
-	int		ind;
 	int mark;
 	int visited;
-	struct 		s_room *next;
+	struct 		 s_room *next;
 }					t_room;
 
 typedef struct		s_links
 {
 	char *connection;
 	int visited;
+	struct 		s_links *way;
 	struct 		s_links *next;
 }					t_links;
 
@@ -50,5 +53,6 @@ int					check_the_same_rooms_names(t_room *room);
 int					is_link(char *line);
 void				lst_add_links(t_links **stk, char *connection);
 int start_al(t_ants **all);
+int					amount_list_el_links(t_links *list);
 
 #endif

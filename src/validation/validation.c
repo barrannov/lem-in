@@ -28,6 +28,7 @@ int reading(t_ants **all)
 		get_next_line(fd, &line);
 		lst_add_rooms(&res, line, 0);
 	}
+
 	if (is_number(line) && ft_atoi(line) > 0 && ft_atoi(line) < 2147483647)
 		(*all)->amount_ants = (int)ft_atoi(line);
 	else
