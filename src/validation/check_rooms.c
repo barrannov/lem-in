@@ -51,7 +51,14 @@ int is_room(char *line)
 {
 	char **coor_of_rooms;
 	int tir;
+	int i;
+	int spaces;
 
+	i = -1;
+//	while(line[i++])
+//	{
+//		if()
+//	}
 	tir = 0;
 	coor_of_rooms = ft_strsplit(line, ' ');
 	if (length((void *) coor_of_rooms) != 3)

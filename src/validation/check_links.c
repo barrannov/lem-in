@@ -47,7 +47,6 @@ void add_link_to_room(t_room **rooms, char *line)
 
 	temp = *rooms;
 	coor_of_links = ft_strsplit(line, '-');
-
 	while (temp)
 	{
 		if (ft_strcmp(coor_of_links[0], temp->name) == 0 && check_the_same_links((temp)->links, coor_of_links[1]))

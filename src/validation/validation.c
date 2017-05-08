@@ -62,6 +62,6 @@ int reading(t_ants **all)
 		i++;
 	}
 	out_res(res);
-	start_al(all);
+	start_all(all);
 	return (1);
 }
