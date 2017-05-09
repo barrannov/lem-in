@@ -1,25 +1,18 @@
 NAME = lem-in
-LIB = -L./libft -lft
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
-#FLAGS = -Wall -Wextra -Werror
+OBJECTS = 
 
-SRC = lem-in.c \
+all : $(NAME)
 
-BINS = $(SRC:.c=.o)
-O1 = main.o
+$(NAME) : $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)
 
-all: $(NAME)
+clean :
+	rm -f $(OBJECTS)
 
-$(NAME): $(BINS) $(O1)
-	make -C libft/
-	gcc $(LIB) $(FLAGS) -o $(NAME) $(O1) $(BINS)
-
-%.o: %.c
-	gcc  -c -o $@ $< $(FLAGS)
-clean:
-	make -C libft/ clean
-	rm -f $(BINS) $(O1)
-fclean: clean
-	make -C libft/ fclean
+fclean : clean
 	rm -f $(NAME)
-re: fclean all
+
+re : fclean all

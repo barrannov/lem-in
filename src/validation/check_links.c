@@ -130,7 +130,7 @@ int handle_links(t_ants **all, char *line, t_room **res)
 		add_link_to_room(&(*all)->rooms_info, line);
 
 	}
-	out_links((*all)->rooms_info);
+//	out_links((*all)->rooms_info);
 	return (1);
 }
 

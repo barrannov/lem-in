@@ -1,37 +1,5 @@
 #include "../lem-in.h"
 
-int check_link_as_marked(t_room **room, t_links *links)
-{
-	t_room *temp;
-
-	temp = *room;
-	while (ft_strcmp(temp->name, links->connection) != 0)
-	{
-		temp = temp->next;
-	}
-	if (temp->mark == MARKED)
-		return (0);
-	else
-	{
-		temp->mark = MARKED;
-		return (1);
-	}
-}
-
-int is_start(t_room *rooms, char *name)
-{
-	t_room *temp;
-
-	temp = rooms;
-	while (temp)
-	{
-		if (ft_strcmp(temp->name, name) == 0 && temp->position == START)
-			return (1);
-		temp = temp->next;
-	}
-	return (0);
-}
-
 int is_end(t_room *rooms, char *name)
 {
 	t_room *temp;
@@ -59,21 +27,6 @@ int is_visited(t_room *rooms, char *name)
 	}
 	return (0);
 }
-
-
-//int is_end_exist(t_room *rooms, char *name)
-//{
-//	t_room *temp;
-//
-//	temp = rooms;
-//	while (temp)
-//	{
-//		if (ft_strcmp(temp->name, name) == 0 && temp->position == END)
-//			return (1);
-//		temp = temp->next;
-//	}
-//	return (0);
-//}
 
 void delete_last(t_links *head)
 {
@@ -159,6 +112,7 @@ int handle_way(t_ants **all, t_links *way_temp)
 {
 	t_links *temp;
 	t_links *ways_temp_all;
+
 	temp = way_temp;
 	while (temp->next)
 		temp = temp->next;
@@ -206,6 +160,17 @@ void algorithm(char *name, t_ants **all, t_links *way_temp)
 	delete_last(way_temp);
 }
 
+void set_len(t_links **ways)
+{
+	t_links *ways_temp;
+
+	ways_temp = *ways;
+	while (ways_temp)
+	{
+		ways_temp->len = amount_list_el_links(ways_temp->way);
+		ways_temp = ways_temp->next;
+	}
+}
 
 int start_all(t_ants **all)
 {
@@ -219,5 +184,6 @@ int start_all(t_ants **all)
 		temp = temp->next;
 	algorithm(temp->name, all, way_temp);
 	delete_intersect(&(*all)->ways);
+	set_len(&(*all)->ways);
 	return (1);
 }

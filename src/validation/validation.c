@@ -62,6 +62,9 @@ int reading(t_ants **all)
 		i++;
 	}
 	out_res(res);
+	int u;
+
+	//ft_del_list_room(&res);
 	start_all(all);
 	return (1);
 }

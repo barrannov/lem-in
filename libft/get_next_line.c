@@ -6,7 +6,7 @@
 /*   By: abaranov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/06 16:26:33 by abaranov          #+#    #+#             */
-/*   Updated: 2017/02/06 16:42:17 by abaranov         ###   ########.fr       */
+/*   Updated: 2017/04/07 20:02:49 by abaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char					*start(int fd, char *str)
 		if (check_n(str))
 			return (start(fd, str));
 	}
+	else
+		free(temp);
 	return (str);
 }
 
@@ -72,24 +74,18 @@ int						get_next_line(const int fd, char **line)
 	char				*str;
 	int					i;
 	int					t;
-	static t_struct		*temp;
-	t_struct			*res;
 
 	if (fd < 0 || !line || read(fd, NULL, 0) == -1 || BUFF_SIZE < 0)
 		return (-1);
 	t = 0;
 	i = 0;
-	res = change_list(fd, &temp);
-	str = (*(res->balance)) ? res->balance : ft_strnew(BUFF_SIZE);
-	res->balance = ft_strnew(BUFF_SIZE);
-	check_n(str) ? str = start(fd, str) : 0;
+	str = ft_strnew(BUFF_SIZE);
+	str = start(fd, str);
 	*line = ft_strnew(ft_strlen(str));
 	while (str[i] != '\n' && str[i])
 		(*line)[t++] = str[i++];
 	t = 0;
 	str[i] == '\n' ? i++ : 0;
-	while (str[i])
-		res->balance[t++] = str[i++];
 	free(str);
 	if (i == 0)
 		return (0);

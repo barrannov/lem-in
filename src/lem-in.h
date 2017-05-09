@@ -18,8 +18,6 @@ typedef struct		s_ants
 	int amount_ants;
 	struct s_room *rooms_info;
 	struct		s_room *res;
-	char *start;
-	char *end;
 	struct 		s_links *ways;
 	t_list *map;
 }					t_ants;
@@ -42,11 +40,13 @@ typedef struct		s_links
 	int shortest;
 	int busy;
 	int number_of_ant;
+	int	len;
 	struct 		s_links *way;
 	struct 		s_links *next;
 }					t_links;
 
-
+void find_end_reset_shortest(t_links **ways);
+void find_end_set_shortest(t_links **ways);
 void move_ants(t_ants **all);
 int chack_start_end(t_room *rooms);
 int handle_start(t_ants **all, t_room **res);
@@ -62,5 +62,7 @@ int					is_link(char *line);
 void				lst_add_links(t_links **stk, char *connection);
 int start_all(t_ants **all);
 int					amount_list_el_links(t_links *list);
+void ft_del_list(t_links **head);
+void ft_del_list_room(t_room **head);
 
 #endif

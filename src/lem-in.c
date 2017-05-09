@@ -1,22 +1,5 @@
 #include "lem-in.h"
 
-
-
-//int main()
-//{
-//	char *ar;
-//
-//
-//	ar = (char *)malloc((sizeof(char) * 5) + 1);
-//
-//	int i;
-//
-//	i = 0;
-//
-//	printf("%d", length((void *)&ar));
-//}
-
-
 int out_ways(t_links *ways)
 {
 	t_links *ways_temp;
@@ -33,18 +16,45 @@ int out_ways(t_links *ways)
 			f = 1;
 			while (w_temp->next)
 			{
-				ft_putstr(" ");
 				ft_putstr(w_temp->connection);
-
 				w_temp = w_temp->next;
 			}
-			ft_putstr(" ");
 			ft_putstr(w_temp->connection);
-			ft_putstr("\n");
 		}
 		ways_temp = ways_temp->next;
 	}
 	return (f);
+}
+
+void find_end_reset_shortest(t_links **ways)
+{
+	int length;
+	t_links *ways_temp;
+
+	ways_temp = *ways;
+	while (ways_temp->shortest != 1)
+		ways_temp = ways_temp->next;
+	length = ways_temp->len;
+	ways_temp = *ways;
+
+	while (ways_temp)
+	{
+		if (ways_temp->len < length && ways_temp->donotuse != 1)
+			length = ways_temp->len;
+		ways_temp = ways_temp->next;
+	}
+	ways_temp = *ways;
+	while (ways_temp)
+	{
+		if (ways_temp->donotuse != 1)
+		{
+			if (ways_temp->len == length)
+				ways_temp->shortest = 1;
+			else
+				ways_temp->shortest = 0;
+		}
+		ways_temp = ways_temp->next;
+	}
 }
 
 void find_end_set_shortest(t_links **ways)
@@ -53,21 +63,75 @@ void find_end_set_shortest(t_links **ways)
 	t_links *ways_temp;
 
 	ways_temp = *ways;
-	length = amount_list_el_links(ways_temp->way);
+	length = ways_temp->len;
 	while (ways_temp)
 	{
-		if (amount_list_el_links(ways_temp->way) < length && ways_temp->donotuse != 1)
-			length = amount_list_el_links(ways_temp->way);
+		if (ways_temp->len < length && ways_temp->donotuse != 1)
+			length = ways_temp->len;
 		ways_temp = ways_temp->next;
 	}
 	ways_temp = *ways;
 	while (ways_temp)
 	{
-		if(amount_list_el_links(ways_temp->way) == length)
-			ways_temp->shortest = 1;
+		if (ways_temp->donotuse != 1)
+		{
+			if (ways_temp->len == length)
+				ways_temp->shortest = 1;
+			else
+				ways_temp->shortest = 0;
+		}
 		ways_temp = ways_temp->next;
 	}
+}
 
+void ft_del_list_room(t_room **head)
+{
+	t_room *crawler;
+	t_room *prev;
+	t_links *ways_cr;
+	t_links *way_cr;
+
+	crawler = *head;
+	while (crawler)
+	{
+		prev = crawler;
+//		ways_cr = crawler->links;
+//		while (ways_cr)
+//		{
+//			way_cr = ways_cr->way;
+//			while (way_cr)
+//			{
+//				ft_del_list(&way_cr->way);
+//				way_cr = way_cr->next;
+//			}
+//			ft_del_list(&ways_cr->way);
+//			ways_cr = ways_cr->next;
+//		}
+		crawler = crawler->next;
+		ft_bzero(prev, sizeof(prev));
+		ft_del_list(&prev->links);
+		free(prev->name);
+		free(prev);
+	}
+	*head = NULL;
+	return;
+}
+
+void ft_del_list(t_links **head)
+{
+	t_links *crawler;
+	t_links *prev;
+
+	crawler = *head;
+	while (crawler)
+	{
+		prev = crawler;
+		crawler = crawler->next;
+		ft_bzero(prev, sizeof(prev));
+		free(prev);
+	}
+	*head = NULL;
+	return;
 }
 
 int main()
@@ -80,29 +144,32 @@ int main()
 		write_error();
 		return (0);
 	}
+//	if (!out_ways(all->ways))
+//	{
+//		write_error();
+//		return (0);
+//	}
 	find_end_set_shortest(&all->ways);
-	if (!out_ways(all->ways))
-		write_error();
 	move_ants(&all);
+	t_links *w_temp;
 
-	return (0);
-}
-/*
-
-int say_hello()
-{
-	ft_putstr("hello");
-	return (1);
-}
-int main()
-{
-	char *ab;
-
-	ab = ft_strdup("qwq");
-	if(!ft_strcmp("qlwq", ab) && say_hello())
+	w_temp = (all)->ways;
+	while (w_temp->next)
 	{
-		ft_putstr("asa");
+		ft_del_list(&w_temp->way);
+		w_temp = w_temp->next;
 	}
+	//ft_del_list_room(&(all)->rooms_info);
+	t_links *fr;
 
+	fr = (all)->ways;
+//	while (fr)
+//	{
+
+//		ft_del_list(&fr->way);
+//		fr = fr->next;
+//	}
+	//ft_del_list(&(all)->ways);
+//	while (1);
 	return (0);
-}*/
+}
