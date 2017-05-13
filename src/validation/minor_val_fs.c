@@ -1,6 +1,6 @@
 #include "../lem-in.h"
 
-int					amount_list_el_links(t_links *list)
+int					amount_links(t_links *list)
 {
 	t_links	*n;
 	int		i;
@@ -52,7 +52,7 @@ void lst_add_links(t_links **stk, char *connection)
 	else
 	{
 		tmp = *stk ;
-		if (amount_list_el_links(*stk) > 1)
+		if (amount_links(*stk) > 1)
 			while (tmp->next)
 			{
 				tmp = tmp->next;

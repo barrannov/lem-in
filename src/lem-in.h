@@ -45,6 +45,11 @@ typedef struct		s_links
 	struct 		s_links *next;
 }					t_links;
 
+int					is_end(t_room *rooms, char *name);
+int					is_visited(t_room *rooms, char *name);
+void				delete_last(t_links *head);
+int					is_intersect(t_links *way1, t_links *way2);
+int					same_ways(t_links *way1, t_links *way2);
 void find_end_reset_shortest(t_links **ways);
 void find_end_set_shortest(t_links **ways);
 void move_ants(t_ants **all);
@@ -61,7 +66,7 @@ int					check_the_same_rooms_names(t_room *room);
 int					is_link(char *line);
 void				lst_add_links(t_links **stk, char *connection);
 int start_all(t_ants **all);
-int					amount_list_el_links(t_links *list);
+int					amount_links(t_links *list);
 void ft_del_list(t_links **head);
 void ft_del_list_room(t_room **head);
 void out_res(t_room *res);
