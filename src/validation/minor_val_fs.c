@@ -44,7 +44,7 @@ void lst_add_links(t_links **stk, char *connection)
 	t_links *tmp;
 
 	new = (t_links *) malloc(sizeof(t_links));
-	new->connection = ft_strdup(connection);
+	new->connection = connection;
 	new->way = NULL;
 	new->next = NULL;
 	if (*stk == NULL)
@@ -67,8 +67,9 @@ void lst_add_rooms(t_room **stk, char *name, int position)
 	t_room *tmp;
 
 	new = (t_room *) malloc(sizeof(t_room));
-	new->name = ft_strdup(name);
+	new->name = name;
 	new->position = position;
+	new->links = NULL;
 	new->next = NULL;
 	if (*stk == NULL)
 		(*stk) = new;

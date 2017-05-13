@@ -3,7 +3,6 @@
 int add_new_ant(int number, int amount, t_links **ways)
 {
 	t_links *ways_temp;
-	t_links *w_temp;
 
 	ways_temp = *ways;
 	while (ways_temp && number <= amount)
@@ -60,11 +59,9 @@ void move_ants(t_ants **all)
 	int on_way; //количество муравъев уже в пути
 	int i;
 	int temp;
-	int test;
 
-	test = 20;
 	on_way = 1;
-	while (test--)
+	while (1)
 	{
 		if (on_way <= (*all)->amount_ants)
 			on_way = add_new_ant(on_way, (*all)->amount_ants, &(*all)->ways);

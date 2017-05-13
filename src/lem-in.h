@@ -17,8 +17,9 @@ typedef struct		s_ants
 {
 	int amount_ants;
 	struct s_room *rooms_info;
-	struct		s_room *res;
 	struct 		s_links *ways;
+	struct 		s_links *way_temp;
+	struct 		 s_room *res;
 	t_list *map;
 }					t_ants;
 
@@ -27,7 +28,6 @@ typedef struct		s_room
 	char	*name;
 	int		position; //0 - normal room, 1 - start_al, 2 - end
 	struct 		s_links *links;
-	int mark;
 	int visited;
 	struct 		 s_room *next;
 }					t_room;
@@ -64,5 +64,6 @@ int start_all(t_ants **all);
 int					amount_list_el_links(t_links *list);
 void ft_del_list(t_links **head);
 void ft_del_list_room(t_room **head);
+void out_res(t_room *res);
 
 #endif

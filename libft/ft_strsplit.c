@@ -12,79 +12,65 @@
 
 #include "libft.h"
 
-static	int		ft_count_ll(char *s, char c)
+static	int		ft_count_words(const char *str, char c)
 {
-	int test;
-	int i;
-
-	test = 0;
-	i = 0;
-	while (((char)s[i]) != c && ((char)s[i]) != '\0')
-		i++;
-	return (i);
-}
-
-static	char	*fulll(char *s, int c)
-{
-	char	*res;
-	int		i;
+	int	word;
+	int	i;
 
 	i = 0;
-	res = (char *)malloc(ft_count_ll((char *)s, c) * sizeof(char) + 1);
-	while (i < ft_count_ll((char *)s, c))
-	{
-		res[i] = (char)s[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
-}
-
-static int		ft_countt_w(char const *s, char c)
-{
-	char	*p;
-	int		cw;
-
-	if (!s)
+	word = 0;
+	if (!str)
 		return (0);
-	cw = 0;
-	while (*s)
+	while (str[i])
 	{
-		(*s == c && *s) ? s++ : 0;
-		p = (char *)s;
-		while (*p != c && *p)
-			p++;
-		(*s != c && *s) ? cw++ : 0;
-		s = p;
+		if (str[i] == c && str[i + 1] != c)
+			word++;
+		i++;
 	}
-	return (cw);
+	if (str[0] != '\0')
+		word++;
+	return (word);
 }
 
-char			**ft_strsplit(char const *s, char c)
+static	char	*ft_word(const char *str, char c, int *i)
 {
-	char	**r;
-	int		lol[3];
+	char	*s;
+	int		k;
 
-	if (!(r = (char **)malloc((ft_countt_w(s, c) + 1) * 8)))
+	if (!(s = (char *)malloc(sizeof(s) * (ft_strlen(str)))))
 		return (NULL);
-	lol[1] = ft_count_w((char *)s, c);
-	lol[0] = 1;
-	lol[2] = 0;
-	while (lol[2] < lol[1] && s)
+	k = 0;
+	while (str[*i] != c && str[*i])
 	{
-		if (*(char *)s == c)
-		{
-			while (*((char *)s) != c && s++)
-				;
-			lol[0] = 1;
-		}
-		else if (lol[0] == 1 && s)
-		{
-			r[lol[2]++] = fulll((char *)s, c);
-			lol[0] = 0;
-		}
-		s++;
+		s[k] = str[*i];
+		k++;
+		*i += 1;
 	}
-	r[lol[2]++] = (char *)'\0';
-	return (r);
+	s[k] = '\0';
+	while (str[*i] == c && str[*i])
+		*i += 1;
+	return (s);
+}
+
+char			**ft_strsplit(const char *str, char c)
+{
+	int		i;
+	int		j;
+	int		wrd;
+	char	**s;
+
+	i = 0;
+	j = 0;
+	wrd = ft_count_words(str, c);
+	if (!(s = (char **)malloc(sizeof(s) * (wrd + 2))))
+		return (NULL);
+	while (str[i] == c && str[i])
+		i++;
+	while (j < wrd && str[i])
+	{
+		s[j] = ft_word(str, c, &i);
+		j++;
+	}
+	s[j] = NULL;
+	return (s);
 }

@@ -45,30 +45,6 @@ char					*start(int fd, char *str)
 	return (str);
 }
 
-t_struct				*change_list(int fd, t_struct **head)
-{
-	t_struct			*tmp;
-
-	tmp = *head;
-	if (tmp != NULL)
-	{
-		while ((tmp != NULL) && (tmp->fd != fd))
-			tmp = tmp->next;
-		if (tmp && tmp->fd == fd)
-			return (tmp);
-	}
-	if (tmp == NULL)
-	{
-		tmp = malloc(sizeof(t_struct));
-		tmp->fd = fd;
-		tmp->balance = "\0";
-		tmp->next = NULL;
-	}
-	*head != NULL ? tmp->next = *head : 0;
-	*head = tmp;
-	return (*head);
-}
-
 int						get_next_line(const int fd, char **line)
 {
 	char				*str;
@@ -84,7 +60,6 @@ int						get_next_line(const int fd, char **line)
 	*line = ft_strnew(ft_strlen(str));
 	while (str[i] != '\n' && str[i])
 		(*line)[t++] = str[i++];
-	t = 0;
 	str[i] == '\n' ? i++ : 0;
 	free(str);
 	if (i == 0)

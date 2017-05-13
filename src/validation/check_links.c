@@ -15,8 +15,8 @@ void out_links(t_room *res)
 		while (temp)
 		{
 			ft_putstr(temp->connection);
-			if(temp->next)
-			ft_putstr(", ");
+			if (temp->next)
+				ft_putstr(", ");
 			temp = temp->next;
 		}
 		ft_putchar(']');
@@ -30,10 +30,12 @@ int check_the_same_links(t_links *links, char *line)
 {
 	t_links *temp;
 
+	if (links == NULL)
+		return (1);
 	temp = links;
 	while (temp)
 	{
-		if(ft_strcmp(temp->connection, line) == 0)
+		if (temp->connection && ft_strcmp(temp->connection, line) == 0)
 			return (0);
 		temp = temp->next;
 	}
@@ -47,14 +49,23 @@ void add_link_to_room(t_room **rooms, char *line)
 
 	temp = *rooms;
 	coor_of_links = ft_strsplit(line, '-');
-	while (temp)
+	while (temp->next)
 	{
 		if (ft_strcmp(coor_of_links[0], temp->name) == 0 && check_the_same_links((temp)->links, coor_of_links[1]))
-			lst_add_links(&(temp)->links, coor_of_links[1]);
+			lst_add_links(&(temp)->links, ft_strdup(coor_of_links[1]));
 		if (ft_strcmp(coor_of_links[1], temp->name) == 0 && check_the_same_links((temp)->links, coor_of_links[0]))
-			lst_add_links(&(temp)->links, coor_of_links[0]);
+			lst_add_links(&(temp)->links, ft_strdup(coor_of_links[0]));
 		temp = temp->next;
 	}
+	int i;
+
+	i = 0;
+	while (coor_of_links[i])
+	{
+		free(coor_of_links[i]);
+		i++;
+	}
+	free(coor_of_links);
 }
 
 int check_links_concurrences(t_ants *all, char *line)
@@ -79,6 +90,15 @@ int check_links_concurrences(t_ants *all, char *line)
 			f_room2 = 1;
 		temp = temp->next;
 	}
+	int i;
+
+	i = 0;
+	while (coor_of_links[i])
+	{
+		free(coor_of_links[i]);
+		i++;
+	}
+	free(coor_of_links);
 	if (f_room1 == 1 && f_room2 == 1)
 		return (1);
 	else
@@ -95,19 +115,34 @@ int is_link(char *line)
 	l = 0;
 	i = 0;
 	if (length((void *) coor_of_links) != 2)
+	{
+		i = 0;
+		while (coor_of_links[i])
+		{
+			free(coor_of_links[i]);
+			i++;
+		}
+		free(coor_of_links);
 		return (0);
+	}
 	while (line[i])
 	{
 		if (line[i] == '-')
 			l++;
 		i++;
 	}
+	i = 0;
+	while (coor_of_links[i])
+	{
+		free(coor_of_links[i]);
+		i++;
+	}
+	free(coor_of_links);
 	if (l == 1)
 		return (1);
 	else
 		return (0);
 }
-
 
 
 int handle_links(t_ants **all, char *line, t_room **res)
@@ -128,8 +163,8 @@ int handle_links(t_ants **all, char *line, t_room **res)
 			return (0);
 		lst_add_rooms(res, line, 0);
 		add_link_to_room(&(*all)->rooms_info, line);
-
 	}
+	free(line);
 //	out_links((*all)->rooms_info);
 	return (1);
 }

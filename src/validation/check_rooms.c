@@ -11,9 +11,9 @@ int chack_start_end(t_room *rooms)
 	temp = rooms;
 	while (temp)
 	{
-		if(temp->position == START)
+		if (temp->position == START)
 			st = START;
-		if(temp->position == END)
+		if (temp->position == END)
 			end = END;
 		temp = temp->next;
 	}
@@ -26,25 +26,54 @@ int chack_start_end(t_room *rooms)
 int handle_start(t_ants **all, t_room **res)
 {
 	char *line;
+	char **arr;
 
 	get_next_line(fd, &line);
 	lst_add_rooms(res, line, 0);
 	if (!is_room(line))
 		return (0);
-	lst_add_rooms(&(*all)->rooms_info, ft_strsplit(line, ' ')[0], START);
+	arr = ft_strsplit(line, ' ');
+	lst_add_rooms(&(*all)->rooms_info, ft_strdup(arr[0]), START);
+	free(arr[0]);
+	free(arr[1]);
+	free(arr[2]);
+	free(arr);
 	return (1);
 }
 
 int handle_end(t_ants **all, t_room **res)
 {
 	char *line;
+	char **arr;
 
 	get_next_line(fd, &line);
 	lst_add_rooms(res, line, 0);
 	if (!is_room(line))
 		return (0);
-	lst_add_rooms(&(*all)->rooms_info, ft_strsplit(line, ' ')[0], END);
+	arr = ft_strsplit(line, ' ');
+	lst_add_rooms(&(*all)->rooms_info, ft_strdup(arr[0]), END);
+	free(arr[0]);
+	free(arr[1]);
+	free(arr[2]);
+	free(arr);
 	return (1);
+}
+
+
+int check_spaces(char *line)
+{
+	int i;
+	int s;
+
+	i = 0;
+	s = 0;
+	while (line[i])
+	{
+		if(line[i] == ' ')
+			s++;
+		i++;
+	}
+	return (s);
 }
 
 int is_room(char *line)
@@ -52,29 +81,51 @@ int is_room(char *line)
 	char **coor_of_rooms;
 	int tir;
 	int i;
-	int spaces;
 
-	i = -1;
-//	while(line[i++])
-//	{
-//		if()
-//	}
 	tir = 0;
+	i = 0;
 	coor_of_rooms = ft_strsplit(line, ' ');
-	if (length((void *) coor_of_rooms) != 3)
-		return (0);
+
+	tir = 0;
 	while (coor_of_rooms[0][tir])
 	{
 		if (coor_of_rooms[0][tir] == '-')
+		{
+			while (coor_of_rooms[i])
+			{
+				free(coor_of_rooms[i]);
+				i++;
+			}
+			free(coor_of_rooms);
 			return (0);
+		}
 		tir++;
 	}
-	if (ft_atoi(coor_of_rooms[1]) > 2147483647 || ft_atoi(coor_of_rooms[2]) > 2147483647)
+
+	if (!is_number(coor_of_rooms[1]) || !is_number(coor_of_rooms[2])
+		|| (coor_of_rooms[0][0] == '#' || coor_of_rooms[0][0] == 'L')
+		||  (ft_atoi(coor_of_rooms[1]) > 2147483647 || ft_atoi(coor_of_rooms[2]) > 2147483647)
+		|| (length((void *) coor_of_rooms) != 3) || (check_spaces(line) != 2))
+	{
+		while (coor_of_rooms[i])
+		{
+			free(coor_of_rooms[i]);
+			i++;
+		}
+		free(coor_of_rooms);
+
 		return (0);
-	if (coor_of_rooms[0][0] == '#' || coor_of_rooms[0][0] == 'L')
-		return (0);
-	if (!is_number(coor_of_rooms[1]) || !is_number(coor_of_rooms[2]))
-		return (0);
+	}
+
+//	while (*(coor_of_rooms++))
+//		free(*coor_of_rooms);
+
+	while (coor_of_rooms[i])
+	{
+		free(coor_of_rooms[i]);
+		i++;
+	}
+	free(coor_of_rooms);
 	return (1);
 }
 

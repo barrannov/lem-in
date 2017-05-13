@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_shortest.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abaranov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/13 17:26:59 by abaranov          #+#    #+#             */
+/*   Updated: 2017/05/13 17:27:00 by abaranov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../lem-in.h"
 
-int is_end(t_room *rooms, char *name)
+int				is_end(t_room *rooms, char *name)
 {
-	t_room *temp;
+	t_room		*temp;
 
 	temp = rooms;
 	while (temp)
@@ -14,9 +26,9 @@ int is_end(t_room *rooms, char *name)
 	return (0);
 }
 
-int is_visited(t_room *rooms, char *name)
+int				is_visited(t_room *rooms, char *name)
 {
-	t_room *temp;
+	t_room		*temp;
 
 	temp = rooms;
 	while (temp)
@@ -28,11 +40,12 @@ int is_visited(t_room *rooms, char *name)
 	return (0);
 }
 
-void delete_last(t_links *head)
+void		delete_last(t_links *head)
 {
-	t_links *temp = head;
+	t_links *temp;
 	t_links *t;
 
+	temp = head;
 	while (temp->next != NULL)
 	{
 		t = temp;
@@ -42,7 +55,7 @@ void delete_last(t_links *head)
 	t->next = NULL;
 }
 
-int is_intersect(t_links *way1, t_links *way2)
+int			is_intersect(t_links *way1, t_links *way2)
 {
 	t_links *way1_temp;
 	t_links *way2_temp;
@@ -64,7 +77,7 @@ int is_intersect(t_links *way1, t_links *way2)
 	return (0);
 }
 
-int same_ways(t_links *way1, t_links *way2)
+int			same_ways(t_links *way1, t_links *way2)
 {
 	t_links *way1_temp;
 	t_links *way2_temp;
@@ -81,11 +94,12 @@ int same_ways(t_links *way1, t_links *way2)
 	return (1);
 }
 
-int delete_intersect(t_links **ways)
+
+int				delete_intersect(t_links **ways)
 {
-	t_links *ways_temp;
-	t_links *ways_temp2;
-	t_links *w_temp;
+	t_links 	*ways_temp;
+	t_links		*ways_temp2;
+	t_links 	*w_temp;
 
 	ways_temp = *ways;
 	while ((ways_temp) != NULL)
@@ -96,9 +110,10 @@ int delete_intersect(t_links **ways)
 		{
 			if (!same_ways((w_temp), (ways_temp2)->way) && is_intersect((w_temp), (ways_temp2)->way))
 			{
+				if (amount_list_el_links((w_temp)) == amount_list_el_links((ways_temp2)->way) &&
+					(ways_temp2)->donotuse != 1)
+					ways_temp->donotuse = 1;
 				if (amount_list_el_links((w_temp)) < amount_list_el_links((ways_temp2)->way))
-					ways_temp2->donotuse = 1;
-				else if (amount_list_el_links((w_temp)) == amount_list_el_links((ways_temp2)->way) && (ways_temp)->donotuse != 1)
 					ways_temp2->donotuse = 1;
 			}
 			ways_temp2 = (ways_temp2)->next;
@@ -131,12 +146,12 @@ int handle_way(t_ants **all, t_links *way_temp)
 	return (0);
 }
 
-void algorithm(char *name, t_ants **all, t_links *way_temp)
+void algorithm(char *name, t_ants **all, int f)
 {
 	t_room *temp_room;
 	t_links *temp_links;
 
-	lst_add_links(&way_temp, name);
+	lst_add_links(&(*all)->way_temp, name);
 	temp_room = (*all)->rooms_info;
 	if (!is_end((*all)->rooms_info, name))
 	{
@@ -149,16 +164,18 @@ void algorithm(char *name, t_ants **all, t_links *way_temp)
 			if (temp_links->visited != 1 && !is_visited((*all)->rooms_info, temp_links->connection))
 			{
 				temp_links->visited = 1;
-				algorithm(temp_links->connection, all, way_temp);
+				algorithm(temp_links->connection, all, f++);
 			}
 			temp_links->visited = 0;
 			temp_links = temp_links->next;
 		}
 		temp_room->visited = 0;
 	}
-	handle_way(all, way_temp);
-	delete_last(way_temp);
+	handle_way(all, (*all)->way_temp);
+	delete_last((*all)->way_temp);
 }
+
+
 
 void set_len(t_links **ways)
 {
@@ -175,14 +192,13 @@ void set_len(t_links **ways)
 int start_all(t_ants **all)
 {
 	t_room *temp;
-	t_links *way_temp;
 
-	way_temp = NULL;
-	(*all)->ways = NULL;
+
+	(*all)->way_temp = NULL;
 	temp = (*all)->rooms_info;
 	while (temp->position != START)
 		temp = temp->next;
-	algorithm(temp->name, all, way_temp);
+	algorithm(temp->name, all,  0);
 	delete_intersect(&(*all)->ways);
 	set_len(&(*all)->ways);
 	return (1);
