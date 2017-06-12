@@ -6,7 +6,7 @@
 /*   By: abaranov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 10:59:38 by abaranov          #+#    #+#             */
-/*   Updated: 2016/12/14 13:39:38 by abaranov         ###   ########.fr       */
+/*   Updated: 2017/05/13 19:52:46 by abaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ size_t			ft_strlcat(char *restrict dst,
 char			*ft_strstr(const char *big, const char *little);
 char			*ft_strnstr(const char *big, const char *little, size_t len);
 int				ft_strcmp(const char *s1, const char *s2);
-long ft_atoi(const char *str);
+long			ft_atoi(const char *str);
 int				ft_isprint(int c);
 int				ft_tolower(int c);
 int				ft_toupper(int c);

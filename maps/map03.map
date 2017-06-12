@@ -1,0 +1,16 @@
+10
+##start
+0 1 0
+#comment
+##end
+1 5 0
+##lalka
+2 9 0
+#comment
+3 13 0
+0-2
+2-3
+#comment
+#comment
+#comment
+3-1

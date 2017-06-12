@@ -1,39 +1,28 @@
-# include "../lem-in.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_rooms.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abaranov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/13 18:06:02 by abaranov          #+#    #+#             */
+/*   Updated: 2017/05/15 14:00:48 by abaranov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int chack_start_end(t_room *rooms)
+#include "../lem_in.h"
+
+int					handle_start(t_ants **all, t_room **res)
 {
-	t_room *temp;
-	int st;
-	int end;
+	char	*line;
+	char	**arr;
 
-	st = 0;
-	end = 0;
-	temp = rooms;
-	while (temp)
-	{
-		if (temp->position == START)
-			st = START;
-		if (temp->position == END)
-			end = END;
-		temp = temp->next;
-	}
-	if (st == START && end == END)
-		return (1);
-	else
-		return (0);
-}
-
-int handle_start(t_ants **all, t_room **res)
-{
-	char *line;
-	char **arr;
-
-	get_next_line(fd, &line);
+	get_next_line(g_fd, &line);
 	lst_add_rooms(res, line, 0);
-	if (!is_room(line))
+	if (!isroom(line))
 		return (0);
 	arr = ft_strsplit(line, ' ');
-	lst_add_rooms(&(*all)->rooms_info, ft_strdup(arr[0]), START);
+	lst_add_rooms(&(*all)->rooms_i, ft_strdup(arr[0]), START);
 	free(arr[0]);
 	free(arr[1]);
 	free(arr[2]);
@@ -41,17 +30,17 @@ int handle_start(t_ants **all, t_room **res)
 	return (1);
 }
 
-int handle_end(t_ants **all, t_room **res)
+int					handle_end(t_ants **all, t_room **res)
 {
-	char *line;
-	char **arr;
+	char	*line;
+	char	**arr;
 
-	get_next_line(fd, &line);
+	get_next_line(g_fd, &line);
 	lst_add_rooms(res, line, 0);
-	if (!is_room(line))
+	if (!isroom(line))
 		return (0);
 	arr = ft_strsplit(line, ' ');
-	lst_add_rooms(&(*all)->rooms_info, ft_strdup(arr[0]), END);
+	lst_add_rooms(&(*all)->rooms_i, ft_strdup(arr[0]), END);
 	free(arr[0]);
 	free(arr[1]);
 	free(arr[2]);
@@ -59,102 +48,70 @@ int handle_end(t_ants **all, t_room **res)
 	return (1);
 }
 
-
-int check_spaces(char *line)
+void				free_array(char **coor)
 {
 	int i;
-	int s;
 
 	i = 0;
-	s = 0;
-	while (line[i])
-	{
-		if(line[i] == ' ')
-			s++;
-		i++;
-	}
-	return (s);
+	while (coor[i])
+		free(coor[i++]);
+	free(coor);
 }
 
-int is_room(char *line)
+int					isroom(char *line)
 {
-	char **coor_of_rooms;
-	int tir;
-	int i;
+	char	**coor;
+	int		tir;
+	int		f;
 
+	f = 1;
+	coor = ft_strsplit(line, ' ');
 	tir = 0;
-	i = 0;
-	coor_of_rooms = ft_strsplit(line, ' ');
-
-	tir = 0;
-	while (coor_of_rooms[0][tir])
+	if (length((void *)coor) != 3)
 	{
-		if (coor_of_rooms[0][tir] == '-')
+		free_array(coor);
+		return (0);
+	}
+	while (coor[0][tir])
+		if (coor[0][tir++] == '-')
 		{
-			while (coor_of_rooms[i])
-			{
-				free(coor_of_rooms[i]);
-				i++;
-			}
-			free(coor_of_rooms);
+			free_array(coor);
 			return (0);
 		}
-		tir++;
-	}
-
-	if (!is_number(coor_of_rooms[1]) || !is_number(coor_of_rooms[2])
-		|| (coor_of_rooms[0][0] == '#' || coor_of_rooms[0][0] == 'L')
-		||  (ft_atoi(coor_of_rooms[1]) > 2147483647 || ft_atoi(coor_of_rooms[2]) > 2147483647)
-		|| (length((void *) coor_of_rooms) != 3) || (check_spaces(line) != 2))
-	{
-		while (coor_of_rooms[i])
-		{
-			free(coor_of_rooms[i]);
-			i++;
-		}
-		free(coor_of_rooms);
-
-		return (0);
-	}
-
-//	while (*(coor_of_rooms++))
-//		free(*coor_of_rooms);
-
-	while (coor_of_rooms[i])
-	{
-		free(coor_of_rooms[i]);
-		i++;
-	}
-	free(coor_of_rooms);
-	return (1);
+	if ((!is_number(coor[1]) || !is_number(coor[2]))
+			|| (coor[0][0] == '#' || coor[0][0] == 'L')
+			|| (ft_atoi(coor[1]) > 2147483647 || ft_atoi(coor[2]) > 2147483647)
+			|| (length((void *)coor) != 3) || (check_spaces(line) != 2))
+		f = 0;
+	free_array(coor);
+	return (f);
 }
 
-int check_the_same_rooms_names(t_room *room)
+int					rooms_n(t_room *room)
 {
-	t_room *temp;
-	t_room *temp_loop;
-	int i;
-	int j;
+	t_room		*temp;
+	t_room		*temp_loop;
+	int			i;
+	int			j;
 
 	i = 0;
 	temp = room;
-	if (amount_list_el_rooms(room) < 2)
-		return (1);
-	while (temp)
-	{
-		temp_loop = room;
-		j = 0;
-		while (temp_loop)
+	if (amount_list_el_rooms(room) >= 2)
+		while (temp)
 		{
-			if (((!ft_strcmp(temp_loop->name, temp->name)) ||
-				 ((temp_loop->position == 2 && temp->position == 2)
-				  || (temp_loop->position == 1 && temp->position == 1))) && j != i)
-				return (0);
-			temp_loop = temp_loop->next;
-			j++;
+			temp_loop = room;
+			j = 0;
+			while (temp_loop)
+			{
+				if (((!ft_strcmp(temp_loop->name, temp->name)) ||
+							((temp_loop->position == 2 && temp->position == 2)
+			|| (temp_loop->position == 1 && temp->position == 1))) && j != i)
+					return (0);
+				temp_loop = temp_loop->next;
+				j++;
+			}
+			temp = temp->next;
+			i++;
 		}
-		temp = temp->next;
-		i++;
-	}
 	return (1);
 }
